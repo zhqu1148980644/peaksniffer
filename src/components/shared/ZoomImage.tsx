@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useCallback, useEffect } from "react";
+import React, {Fragment, useCallback, useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import { Portal, Backdrop, withStyles } from "@material-ui/core";
+import {Backdrop, Portal, withStyles} from "@material-ui/core";
 import ScrollbarSize from "@material-ui/core/Tabs/ScrollbarSize";
 import classNames from "classnames";
 
@@ -40,18 +40,18 @@ const styles = (theme) => ({
 } as const);
 
 function ZoomImage(props) {
-  const { alt, src, zoomedImgProps, classes, className, ...rest } = props;
+  const {alt, src, zoomedImgProps, classes, className, ...rest} = props;
   const [zoomedIn, setZoomedIn] = useState(false);
   const [scrollbarSize, setScrollbarSize] = useState(null);
-
+  
   const zoomIn = useCallback(() => {
     setZoomedIn(true);
   }, [setZoomedIn]);
-
+  
   const zoomOut = useCallback(() => {
     setZoomedIn(false);
   }, [setZoomedIn]);
-
+  
   useEffect(() => {
     if (zoomedIn) {
       document.body.style.overflow = "hidden";
@@ -65,7 +65,7 @@ function ZoomImage(props) {
       document.querySelector("header").style.paddingRight = "0px";
     }
   }, [zoomedIn, scrollbarSize]);
-
+  
   return (
     <Fragment>
       <ScrollbarSize onChange={setScrollbarSize}></ScrollbarSize>
@@ -108,4 +108,4 @@ ZoomImage.propTypes = {
   className: PropTypes.string,
 };
 
-export default withStyles(styles, { withTheme: true })(ZoomImage);
+export default withStyles(styles, {withTheme: true})(ZoomImage);

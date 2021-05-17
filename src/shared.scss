@@ -1,5 +1,3 @@
-//@import "../node_modules/bulma/bulma.sass"
-.BaseTable__header-cell, .BaseTable__row-cell {
-  display: flex;
-  justify-content: center;
+.selectionColumnCell {
+  justify-content: start;
 }

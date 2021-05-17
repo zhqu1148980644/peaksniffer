@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 
 const styles = {
   waves: {
@@ -11,8 +11,8 @@ const styles = {
     minHeight: "7vw"
   },
   "@keyframes moveForever": {
-    from: { transform: "translate3d(-90px, 0, 0)" },
-    to: { transform: "translate3d(85px, 0, 0)" }
+    from: {transform: "translate3d(-90px, 0, 0)"},
+    to: {transform: "translate3d(85px, 0, 0)"}
   },
   parallax: {
     "& > use": {
@@ -36,7 +36,7 @@ function WaveBorder(props) {
     ...rest
   } = props;
   return (
-    <div className={className} style={{ background: upperColor }} {...rest}>
+    <div className={className} style={{background: upperColor}} {...rest}>
       <svg
         className={classes.waves}
         xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ function WaveBorder(props) {
           />
         </defs>
         <g className={classes.parallax}>
-          <use href={`#${id}`} x="48" y="0" fill={lowerColor} />
+          <use href={`#${id}`} x="48" y="0" fill={lowerColor}/>
         </g>
       </svg>
     </div>

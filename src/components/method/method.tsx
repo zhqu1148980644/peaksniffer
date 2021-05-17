@@ -1,18 +1,5 @@
-import React, { Fragment , useState, useEffect} from "react";
-import PropTypes from "prop-types";
-import classNames from "classnames";
-import {
-  Grid,
-  Typography,
-  Card,
-  Button,
-  Hidden,
-  Box,
-  withStyles,
-  withWidth,
-  isWidthUp,
-  Paper
-} from "@material-ui/core";
+import React from "react";
+import {Card, Grid, Typography, withStyles, withWidth} from "@material-ui/core";
 import {useMarkDown} from "../shared/fileutil"
 import ReactMarkdown from "react-markdown";
 import ZoomImage from "../shared/ZoomImage"
@@ -50,9 +37,9 @@ function MethodInfo(props) {
     ImgPath,
     MdPath,
   } = props;
-
+  
   const mdText = useMarkDown(MdPath);
-
+  
   return (
     <>
       <Grid container className={classes.main}>
@@ -64,7 +51,7 @@ function MethodInfo(props) {
         <Grid container item className={classes.contentBox}>
           <Grid item xs={12} md={6} className={classes.mdBox}>
             <Card>
-              <ReactMarkdown className={"content"} children={mdText}></ReactMarkdown>
+              <ReactMarkdown className={"content"} children={mdText}/>
             </Card>
           </Grid>
           <Grid item xs={12} md={5}>
@@ -75,14 +62,13 @@ function MethodInfo(props) {
             />
           </Grid>
         </Grid>
-
+      
       </Grid>
     </>
   );
 }
 
 
-
 export default withWidth()(
-  withStyles(styles, { withTheme: true })(MethodInfo)
+  withStyles(styles, {withTheme: true})(MethodInfo)
 );

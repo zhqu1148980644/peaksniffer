@@ -1,28 +1,23 @@
 import {useEffect, useState} from "react"
 import {Link} from "react-router-dom"
 import {
-  withStyles,
+  Collapse,
+  Drawer,
+  IconButton,
+  isWidthUp,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Drawer,
-  IconButton,
-  Typography,
   Toolbar,
-  withWidth,
-  isWidthUp,
-  Collapse
+  Typography,
+  withStyles
 } from '@material-ui/core'
 import CloseIcon from "@material-ui/icons/Close"
-import {
-  ExpandLess,
-  ExpandMore
-} from "@material-ui/icons"
+import {ExpandLess, ExpandMore} from "@material-ui/icons"
 
 const styles = theme => ({
-  submenuItems: {
-  },
+  submenuItems: {},
   noDecoration: {
     textDecoration: "none !important",
     color: "grey",
@@ -30,39 +25,38 @@ const styles = theme => ({
   headSection: {
     width: 200,
   },
-  closeIcon: {
-  }
+  closeIcon: {}
 })
 
 
 function TabListItem(props) {
-  const { classes, theme, item, selectedItem } = props;
+  const {classes, theme, item, selectedItem} = props;
   return (
-      <ListItem
-        button
-        className={classes.noDecoration}
-        selected={selectedItem === item.name}
-        style={{alignItems: 'center'}}
-        // disableRipple
-        // disableTouchRipple
-        
-        {...props}
-      >
-        <ListItemIcon>{item.icon}</ListItemIcon>
-        <ListItemText
-          primary={
-            <Typography variant="subtitle1">
-              {item.name}
-            </Typography>
-          }
-        />
-        {props.children}
-      </ListItem>
+    <ListItem
+      button
+      className={classes.noDecoration}
+      selected={selectedItem === item.name}
+      style={{alignItems: 'center'}}
+      // disableRipple
+      // disableTouchRipple
+      
+      {...props}
+    >
+      <ListItemIcon>{item.icon}</ListItemIcon>
+      <ListItemText
+        primary={
+          <Typography variant="subtitle1">
+            {item.name}
+          </Typography>
+        }
+      />
+      {props.children}
+    </ListItem>
   )
 }
 
 function LinkTabListItem(props) {
-  const { classes, theme, item, setItem } = props;
+  const {classes, theme, item, setItem} = props;
   return (
     <Link
       key={item.name}
@@ -82,22 +76,22 @@ function NavigationDrawer(props) {
     open, onClose, anchor,
     classes, theme
   } = props;
-
+  
   const [openedTab, openTab] = useState("")
-
+  
   useEffect(() => {
     if (isWidthUp("sm", width) && open) {
       onClose();
     }
   }, [width, open, onClose]);
-
+  
   let flipTab = (itemname) => {
     if (itemname === openedTab)
       openTab("");
     else
       openTab(itemname);
   }
-
+  
   return (
     <Drawer
       variant="temporary"
@@ -121,7 +115,7 @@ function NavigationDrawer(props) {
           </ListItemIcon>
         </ListItem>
       </Toolbar>
-
+      
       <List className={classes.menuItems}>
         {menuItems.map((item) => {
           return Array.isArray(item.items) ?
@@ -132,7 +126,7 @@ function NavigationDrawer(props) {
                 </TabListItem>
                 <Collapse in={openedTab === item.name} timeout="auto">
                   <List className={classes.submenuItems} component="div">
-                    {item.items.map(item => 
+                    {item.items.map(item =>
                       <LinkTabListItem key={item.name} item={item} {...props}/>
                     )}
                   </List>
@@ -146,4 +140,4 @@ function NavigationDrawer(props) {
   )
 }
 
-export default withStyles(styles, { withTheme: true })(NavigationDrawer);
+export default withStyles(styles, {withTheme: true})(NavigationDrawer);
