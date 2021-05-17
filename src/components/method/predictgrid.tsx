@@ -115,6 +115,7 @@ const steps = {
 function PredictGrid(props) {
   const {classes, theme} = props
   
+  console.log("API", API)
   
   const [activeStep, setActiveStep] = useState(0);
   const handleStep = (step: number) => () => {
