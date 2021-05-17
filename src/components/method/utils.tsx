@@ -37,7 +37,8 @@ export function get_default_column(col) {
     hidden: false
   }
 }
-export function genomeRangeColumn(column, editable=true) {
+
+export function genomeRangeColumn(column, editable = true) {
   return {
     ...column,
     format: editable ? "genomeRange" : null,

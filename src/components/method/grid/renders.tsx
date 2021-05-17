@@ -1,5 +1,5 @@
-import React from "react";
-import {Box, Button, ButtonGroup, IconButton, TextField} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {Box, ButtonGroup, IconButton, TextField} from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
 import styled from "styled-components"
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,68 +17,70 @@ function stringRender({columns, className, cellData}) {
 }
 
 
-class EditableRender extends React.PureComponent<any, any> {
-  state = {
-    value: this.props.cellData,
-    editing: false,
-    valid: this.validate(this.props.cellData)
+function EditableRender(props) {
+  const {disableText} = props
+  const [value, setValue] = useState(props.cellData)
+  const [editing, setEditing] = useState(false)
+  
+  useEffect(() => {
+    setValue(props.cellData)
+  }, [props.cellData])
+  const valid = props.validate(value)
+  
+  console.log(value, editing, valid)
+  
+  const handleClick = () => {
+    setEditing(true)
   }
   
-  handleClick = () => this.setState({editing: true})
-  
-  handleHide = () => this.setState({editing: false})
-  
-  handleChange = e => {
-    this.setState({
-      value: e.target.value,
-      valid: this.validate(e.target.value)
-    })
+  const handleHide = () => {
+    setEditing(false)
   }
   
-  handleBlur = e => {
-    const {column} = this.props
+  const handleChange = e => {
+    setValue(e.target.value)
+    // handleHide()
+  }
+  
+  const handleBlur = e => {
+    const {column} = props
     const {updateCellData} = column
-    updateCellData(this.props, e.target.value)
-    this.handleHide()
+    updateCellData(props, e.target.value)
+    handleHide()
   }
   
-  validate(gr) {
-    return true
-  }
   
-  render() {
-    // console.log(this.props)
-    const {editing, value} = this.state
-    
-    return (
-      <CellContainer
-        onDoubleClick={this.handleClick}
-      >
-        {!editing && this.state.valid && value}
-        {!editing && !this.state.valid && (
-          <TextField
-            error
-            disabled
-            label={"Invalid range"}
-            value={value}
-          />
-        )}
-        {editing && (
-          <TextField
-            autoFocus
-            error={!this.state.valid}
-            label={this.state.valid ? "" : "Invalid range"}
-            value={value}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}/>
-        )}
-      </CellContainer>
-    )
-  }
+  // console.log(this.props)
+  
+  return (
+    <CellContainer
+      onDoubleClick={handleClick}
+    >
+      {!disableText && !editing && valid && value}
+      {!disableText && !editing && !valid && (
+        <TextField
+          error
+          disabled
+          label={"Invalid range"}
+          value={value}
+        />
+      )}
+      {(editing || disableText) && (
+        <TextField
+          autoFocus
+          error={!valid}
+          label={valid ? "GenomeRange" : "Invalid range"}
+          value={value}
+          onChange={handleChange}
+          onBlur={handleBlur}/>
+      )}
+    </CellContainer>
+  )
 }
 
-class GenomeRangeRender extends EditableRender {
-  validate(gr) {
+
+export function GenomeRangeRender(props) {
+  const validate = (gr) => {
     try {
       const [_, chrom, start, end] = gr.match("^(.*?):(\\d+)-(\\d+)$")
       return true
@@ -86,17 +88,7 @@ class GenomeRangeRender extends EditableRender {
       return false
     }
   }
-}
-
-class GenomeRangePairRender extends EditableRender {
-  validate(gr) {
-    try {
-      const [_, chrom1, start1, end1, chrom2, start2, end2] = gr.match("^(.*?):(\\d+)-(\\d+)|(.*?):(\\d+)-(\\d+)$")
-      return true
-    } catch (error) {
-      return false
-    }
-  }
+  return <EditableRender validate={validate} {...props}/>
 }
 
 
@@ -117,7 +109,6 @@ function InfoRender(props) {
 const renderers = {
   string: stringRender,
   genomeRange: GenomeRangeRender,
-  genomeRangePair: GenomeRangePairRender,
   info: InfoRender
 }
 

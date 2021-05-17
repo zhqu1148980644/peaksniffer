@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, ButtonGroup, Grid, IconButton, Step, StepButton, Stepper, withStyles} from "@material-ui/core"
+import {Box, Button, ButtonGroup, Grid, Step, StepButton, Stepper, withStyles} from "@material-ui/core"
 import axios from "axios";
 
 import {TabPanel} from "./utils";

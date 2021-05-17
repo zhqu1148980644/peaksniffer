@@ -1,6 +1,4 @@
 import {useEffect, useState} from "react"
-import axios from "axios";
-import {createWriteStream} from "fs";
 
 
 export function useMarkDown(mdpath: string) {
@@ -18,8 +16,6 @@ export function useMarkDown(mdpath: string) {
   
   return mdText
 }
-
-
 
 
 export default {useMarkDown}

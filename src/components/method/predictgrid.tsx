@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react"
+import {useEffect, useState} from "react"
 import {Box, Grid, Step, StepButton, Stepper, withStyles} from "@material-ui/core"
 import axios from "axios";
 import {Column} from "react-base-table";
@@ -70,8 +70,7 @@ function parse_anchors(text, columns) {
           id: r
         })
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e)
     }
   })
@@ -90,8 +89,7 @@ function parse_anchor_pairs(text, columns) {
           id: `${gr1}|${gr2}`
         })
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e)
     }
   })
