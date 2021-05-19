@@ -76,7 +76,7 @@ async def predict_anchors(bed: List[dict], selected_models: List[str]) -> List[d
                 lines = line.strip().split()
                 if row['GenomeRange'] == str(lines[0])+':'+str(lines[1])+'-'+str(lines[2]):
 #                    print(row['GenomeRange'], model)
-                    row[model] = lines[3]
+                    row[model] = lines[3][:7]
     for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
         os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed")
     os.remove('query_bed'+str(os.getpid())+'.bed')
@@ -92,7 +92,7 @@ async def predict_anchor_pairs(bedpe: List[dict], selected_models: List[str]) ->
                 lines = line.strip().split()
                 if row['GenomeRange1'] == str(lines[0])+':'+str(lines[1])+'-'+str(lines[2]) and row['GenomeRange2'] == str(lines[3])+':'+str(lines[4])+'-'+str(lines[5]):
 #                    print(row['GenomeRange1'], model)
-                    row[model] = lines[6]
+                    row[model] = lines[6][:7]
     for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
         os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed")
     os.remove('query_bedpe'+str(os.getpid())+'.bed')
@@ -127,12 +127,12 @@ async def download_pairs(query: Query):
     print("download", query)
     import io
     stream = io.StringIO()
-    for pair in filtered_pairs:
+    for pair in res:
         model = pair['Model']
         gr1 = pair['GenomeRange1']
-        chr1, st1, ed1 = re.findall(r"(.*?):(.*?)-(.*?)", gr1)[0]
+        chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", gr1)[0]
         gr2 = pair['GenomeRange2']
-        chr2, st2, ed2 = re.findall(r"(.*?):(.*?)-(.*?)", gr2)[0]
+        chr2, st2, ed2 = re.findall(r"(.*):(.*)-(.*)", gr2)[0]
         line = '\t'.join([chr1, st1, ed1, chr2, st2, ed2, str(pair['Prob']), model])
         stream.write(line + "\n")
     stream.flush()

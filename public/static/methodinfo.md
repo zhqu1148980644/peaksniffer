@@ -1,17 +1,2 @@
-# Ttitle
-### This is the Description of the method
-### This is the Description of the method
-### This is the Description of the method
-### This is the Description of the method
-### This is the Description of the method
-### This is the Description of the method
-### This is the Description of the method
-
-##### This is the Description of the method
-##### This is the Description of the method
-##### This is the Description of the method
-##### This is the Description of the method
-##### This is the Description of the method
-##### This is the Description of the method
-##### This is the Description of the method
-##### This is the Description of the method
+# CharID
+### Here, we propose a two-step prediction model that combines deep learning and machine learning methods CharID to predict chromatin accessible regions mediated interactions. The CharID model consists of two parts, the CharID-Anchor model and the CharID-loop model. The CharID-anchor model determines which chromatin accessible regions are anchors and non-anchors, while the CharID-Loop model determines which chromatin accessible regions as anchors after the first filtering step can constituted loops. 
