@@ -48,9 +48,12 @@ export default function Viewer(props) {
       setModel(data.Model)
       setGr1(data.GenomeRange1)
       setGr2(data.GenomeRange2)
-      onView()
     }
   }, [data])
+  
+  useEffect(() => {
+    onView()
+  }, [model, gr1, gr2])
   
   const onView = () => {
     if (!model || !gr1 || !gr2) return
