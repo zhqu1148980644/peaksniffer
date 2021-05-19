@@ -43,8 +43,13 @@ def get_test_samples(n=1000):
     return pairs
 
 
-pairs = get_test_samples(100)
+#pairs = get_test_samples(100)
 
+pairs = []
+for model in ['GM12878', 'K562','Hela-S3']:
+    for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/cluster_test_dbscanss.bed"):
+        lines = line.strip().split()
+        pairs.append({'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6])})      
 models = [
     {
         "model": "GM12878",
@@ -214,7 +219,21 @@ async def get_models():
 
 @app.post("/view/loop")
 async def view_loop(row: dict):
-    print(row)
-    with open(Path(PATH, "test_loop.jpeg"), 'rb') as wf:
+#    print(row['Model'])
+#    with open(Path(PATH, "test_loop.jpeg"), 'rb') as wf:
+#        img = wf.read()
+    import os
+    import PyPDF2
+    chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", row['GenomeRange1'])[0]
+    chr2, st2, ed2 = re.findall(r"(.*):(.*)-(.*)", row['GenomeRange2'])[0]
+    model = row['Model']
+    envs = dict(os.environ.items())
+    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/"+str(model)
+    a = await asyncio.create_subprocess_shell(f"python visualization.py -g {chr1}:{st1}-{ed2}", env=envs, cwd=envs['PWD'])
+#    python "/public/home/yshen/deep_learning/webserve/"+str(row['Model'])+"/visualization.py -g"+"\t"+str(chr1)+":"+str(st1)+"-"+str(ed2)
+    await a.wait() 
+    with open(Path(envs['PWD'], "example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg"), 'rb') as wf:
         img = wf.read()
+    os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg")
     return Response(content=img, media_type="image/jpeg")
+#    os.remove("example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg")
