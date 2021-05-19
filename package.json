@@ -21,7 +21,7 @@
     "node-sass": "4.14.1",
     "notistack": "^1.0.7",
     "package.json": "^2.0.1",
-    "react": "^17.0.1",
+    "react": "^16.14.0",
     "react-base-table": "^1.12.0",
     "react-data-grid": "^7.0.0-canary.33",
     "react-dom": "^17.0.1",
