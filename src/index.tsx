@@ -4,8 +4,10 @@ import App from './App';
 import "./shared.scss"
 import {SnackbarProvider} from "notistack";
 
-export const API = process.env.PEAK_SNIFFER_API || "http://127.0.0.1:8000"
+export const API = process.env.PEAK_SNIFFER_API || "https://peaksniffer.bakezq.fun"
 
+
+console.log(process.env.PEAK_SNIFFER_API, process.env)
 
 
 ReactDOM.render(
