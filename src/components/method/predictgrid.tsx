@@ -45,7 +45,7 @@ const anchor_pairs_default_data = [
     GenomeRange1: "chr1:91363-91505", GenomeRange2: "chr1:785655-785805", id: "chr1:91363-91505|chr1:785655-785805"
   },
   {
-    GenomeRange1: "chr1:722115-722337", GenomeRange2: " chr1:723148-723273", id: "chr1:722115-722337|chr1:723148-723273"
+    GenomeRange1: "chr1:722115-722337", GenomeRange2: "chr1:723148-723273", id: "chr1:722115-722337|chr1:723148-723273"
   }
 ]
 
