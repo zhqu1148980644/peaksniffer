@@ -70,16 +70,23 @@ models = [
 async def predict_anchors(bed: List[dict], selected_models: List[str]) -> List[dict]:
     import numpy as np
     import os
+    import traceback
     for row in bed:
         for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
+         try:   
             for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed"):
                 lines = line.strip().split()
                 if row['GenomeRange'] == str(lines[0])+':'+str(lines[1])+'-'+str(lines[2]):
 #                    print(row['GenomeRange'], model)
                     row[model] = lines[3][:7]
-    for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
-        os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed")
-    os.remove('query_bed'+str(os.getpid())+'.bed')
+         except Exception as e:
+            row[model] = str(e)
+    try:
+        for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
+            os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed")
+        os.remove('query_bed'+str(os.getpid())+'.bed')
+    except Exception as e:
+        os.remove('query_bed'+str(os.getpid())+'.bed')
     #await asyncio.sleep(2)
     return bed
 
@@ -88,14 +95,20 @@ async def predict_anchor_pairs(bedpe: List[dict], selected_models: List[str]) ->
     import numpy as np
     for row in bedpe:
         for model in [m['model'] for m in models]:
+         try:
            for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed"):
                 lines = line.strip().split()
                 if row['GenomeRange1'] == str(lines[0])+':'+str(lines[1])+'-'+str(lines[2]) and row['GenomeRange2'] == str(lines[3])+':'+str(lines[4])+'-'+str(lines[5]):
 #                    print(row['GenomeRange1'], model)
                     row[model] = lines[6][:7]
-    for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
-        os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed")
-    os.remove('query_bedpe'+str(os.getpid())+'.bed')
+         except Exception as e:
+             row[model] = str(e)
+    try:  
+        for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
+            os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed")
+        os.remove('query_bedpe'+str(os.getpid())+'.bed')
+    except Exception as e:
+        os.remove('query_bedpe'+str(os.getpid())+'.bed')
 #           row[model] = np.random.random()
     #await asyncio.sleep(2)
     return bedpe
