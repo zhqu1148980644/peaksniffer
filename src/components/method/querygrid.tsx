@@ -32,7 +32,7 @@ function QueryGrid(props) {
     setActiveStep(step);
   };
   const [models, setModels] = useState([])
-  const [rowsPerPage, setRowsPerPage] = useState(20)
+  const [rowsPerPage, setRowsPerPage] = useState(25)
   const [page, setPage] = useState(0)
   const [data, setData] = useState([])
   const [viewingData, setViewingData] = useState(null)
@@ -112,6 +112,8 @@ function QueryGrid(props) {
     axios.post(`${API}/download/predicted_pairs`,
       {
         models: selectedModels,
+        offset: Math.max(page * rowsPerPage, 0),
+        limit: rowsPerPage
       },
       {
         responseType: "blob"
@@ -147,11 +149,11 @@ function QueryGrid(props) {
     </ButtonGroup>
   )
   
-  const handleOnView = (row) => {
-    setViewingData(row)
+  const handleOnView = ({rowData}) => {
+    // TODO why the reference data is not updated in here?
+    setViewingData(rowData)
     setActiveStep(1)
   }
-  
   return (
     <Box>
       <Stepper nonLinear activeStep={activeStep} style={{fontSize: "large"}}>
