@@ -24,3 +24,4 @@ yarn-error.log*
 *.lock
 */__pycache__
 */.idea
+.*lock
