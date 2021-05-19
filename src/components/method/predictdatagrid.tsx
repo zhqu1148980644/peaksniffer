@@ -62,7 +62,7 @@ function Predictdatagrid(props) {
   }
   
   const handleClickVariant = (variant: VariantType) => () => {
-    enqueueSnackbar('The prediction request is submitted, wait for email!', {variant});
+    enqueueSnackbar('The prediction request is submitted, please wait!', {variant});
   }
   
   const onColumnSort = ({key, order}) => {
