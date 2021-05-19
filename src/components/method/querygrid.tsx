@@ -112,6 +112,8 @@ function QueryGrid(props) {
     axios.post(`${API}/download/predicted_pairs`,
       {
         models: selectedModels,
+        offset: Math.max(page * rowsPerPage, 0),
+        limit: rowsPerPage
       },
       {
         responseType: "blob"
