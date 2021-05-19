@@ -42,13 +42,10 @@ const anchors_default_data = [
 
 const anchor_pairs_default_data = [
   {
-    GenomeRange1: "chr1:91363-91505", GenomeRange2: " chr1:545991-546181", id: "chr1:91363-91505| chr1:545991-546181"
+    GenomeRange1: "chr1:91363-91505", GenomeRange2: "chr1:785655-785805", id: "chr1:91363-91505|chr1:785655-785805"
   },
   {
-    GenomeRange1: "chr1:545991-546180", GenomeRange2: "chr1:780334-780688", id: "chr1:545991-546181|chr1:780334-780688"
-  },
-  {
-    GenomeRange1: "chr1:779074-779187", GenomeRange2: "chr1:782233-782380", id: "chr1:779074-779187|chr1:782233-782380"
+    GenomeRange1: "chr1:722115-722337", GenomeRange2: " chr1:723148-723273", id: "chr1:722115-722337|chr1:723148-723273"
   }
 ]
 
