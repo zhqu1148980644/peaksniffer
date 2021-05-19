@@ -34,7 +34,7 @@ export default function Querydatagrid(props) {
   useEffect(() => {
     const newData = default_data.map(row => ({
       ...row,
-      id: `${row.model}|${row.GenomeRange1}|${row.GenomeRange2}`
+      id: `${row.Model}|${row.GenomeRange1}|${row.GenomeRange2}`
     }))
     setData(newData)
   }, [default_data])
@@ -44,24 +44,9 @@ export default function Querydatagrid(props) {
     setData(newData)
   }
   
-  const updateCellData = ({rowIndex, column}, val) => {
-    const {key} = column
-    const newData = [...data]
-    newData[rowIndex][key] = val
-    setData(newData)
-  }
-  
-  
-  const handleOnView = ({rowIndex}) => {
-    const row = data[rowIndex]
-    console.log("viewing data", row, rowIndex, data, default_data)
-    props.handleOnView(row)
-  }
-  
   const columns = _default_columns.map(column => ({
     ...column,
-    updateCellData: updateCellData,
-    onView: handleOnView
+    onView: props.handleOnView
   }))
   
   
