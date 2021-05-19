@@ -30,25 +30,25 @@ const _anchor_pairs_default_columns = [
 
 const anchors_default_data = [
   {
-    GenomeRange: "chr1:1000-2000", id: "chr1:1000-2000"
+    GenomeRange: "chr1:91363-91505", id: "chr1:91363-91505"
   },
   {
-    GenomeRange: "chr1:2000-3000", id: "chr1:2000-3000"
+    GenomeRange: "chr1:779074-779187", id: "chr1:779074-779187"
   },
   {
-    GenomeRange: "chr1:3000-4000", id: "chr1:3000-4000"
+    GenomeRange: "chr1:783055-783158", id: "chr1:783055-783158"
   }
 ]
 
 const anchor_pairs_default_data = [
   {
-    GenomeRange1: "chr1:1000-2000", GenomeRange2: "chr1:1000-2000", id: "chr1:1000-2000|chr1:1000-2000"
+    GenomeRange1: "chr1:91363-91505", GenomeRange2: " chr1:545991-546181", id: "chr1:91363-91505| chr1:545991-546181"
   },
   {
-    GenomeRange1: "chr1:2000-3000", GenomeRange2: "chr2:2000-3000", id: "chr1:2000-3000|chr2:2000-3000"
+    GenomeRange1: "chr1:545991-546181", GenomeRange2: "chr1:779074-779187", id: "chr1:545991-546181|chr1:779074-779187"
   },
   {
-    GenomeRange1: "chr1:3000-4000", GenomeRange2: "chr2:3000-4000", id: "chr1:3000-4000|chr2:3000-4000"
+    GenomeRange1: "chr1:779074-779187", GenomeRange2: "chr1:782233-782380", id: "chr1:779074-779187|chr1:782233-782380"
   }
 ]
 
