@@ -52,6 +52,10 @@ export default function Viewer(props) {
     }
   }, [data])
   
+  useEffect(() => {
+    onView()
+  }, [model, gr1, gr2])
+  
   const onView = () => {
     if (!model || !gr1 || !gr2) return
     setLoading(true)
