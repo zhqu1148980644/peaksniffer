@@ -54,7 +54,7 @@ export default function Querydatagrid(props) {
   
   const handleOnView = ({rowIndex}) => {
     const row = data[rowIndex]
-    console.log("viewing data", row, rowIndex)
+    console.log("viewing data", row, rowIndex, data, default_data)
     props.handleOnView(row)
   }
   
