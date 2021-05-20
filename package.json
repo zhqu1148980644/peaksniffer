@@ -29,7 +29,7 @@
     "react-overlays": "^5.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "react-sortable-hoc": "^1.11.0",
+    "react-sortable-hoc": "^2.0.0",
     "react-texty": "^0.6.0",
     "streamsaver": "^2.0.5",
     "styled-components": "^5.2.1",
