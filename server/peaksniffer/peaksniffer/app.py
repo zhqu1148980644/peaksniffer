@@ -49,7 +49,7 @@ pairs = []
 for model in ['GM12878', 'K562','Hela-S3']:
     for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/cluster_test_dbscanss.bed"):
         lines = line.strip().split()
-        pairs.append({'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6])})      
+        pairs.append({'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6][:7])})      
 models = [
     {
         "model": "GM12878",
@@ -245,8 +245,8 @@ async def view_loop(row: dict):
     a = await asyncio.create_subprocess_shell(f"python visualization.py -g {chr1}:{st1}-{ed2}", env=envs, cwd=envs['PWD'])
 #    python "/public/home/yshen/deep_learning/webserve/"+str(row['Model'])+"/visualization.py -g"+"\t"+str(chr1)+":"+str(st1)+"-"+str(ed2)
     await a.wait() 
-    with open(Path(envs['PWD'], "example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg"), 'rb') as wf:
+    with open(Path(envs['PWD'], "example_"+str(chr1).strip()+":"+str(st1)+"-"+str(ed2)+".jpeg"), 'rb') as wf:
         img = wf.read()
-    os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg")
+    os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/example_"+str(chr1).strip()+":"+str(st1)+"-"+str(ed2)+".jpeg")
     return Response(content=img, media_type="image/jpeg")
 #    os.remove("example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg")

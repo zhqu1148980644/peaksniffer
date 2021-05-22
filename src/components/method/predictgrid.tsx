@@ -105,7 +105,6 @@ const styles = theme => ({
 const steps = {
   step1: "Predict anchor candidates",
   step2: "Predict anchor pairs",
-  step3: "Visualize Loops",
 }
 
 
@@ -180,12 +179,6 @@ function PredictGrid(props) {
             next={() => setActiveStep(2)}
           />
         </Grid>
-      </TabPanel>
-      <TabPanel value={activeStep} step={2}>
-        <Grid container direction="column">
-          <Box>Waiting for done.</Box>
-        </Grid>
-      </TabPanel>
     </Box>
   )
 }
