@@ -112,12 +112,6 @@ const helps = {
   icon: <MoreVertIcon/>,
   items: [
     {
-      link: "/help/FAQ",
-      name: "FAQ",
-      icon: <HelpIcon/>,
-      mdpath: "/static/helppages/faq.md",
-    },
-    {
       link: "/help/Contact",
       name: "Contacts",
       icon: <ContactsIcon/>,
