@@ -47,7 +47,6 @@ const anchor_pairs_default_data = [
   {
     GenomeRange1: "chr1:722115-722337", GenomeRange2: "chr1:723148-723273", id: "chr1:722115-722337|chr1:723148-723273"
   },
-  {
     GenomeRange1: "chr1:780334-780688", GenomeRange2: "chr1:785655-785805", id: "chr1:780334-780688|chr1:785655-785805"
   }
 ]
@@ -106,6 +105,7 @@ const styles = theme => ({
 const steps = {
   step1: "Predict anchor candidates",
   step2: "Predict anchor pairs",
+  step3: "Visualize Loops",
 }
 
 
@@ -180,6 +180,12 @@ function PredictGrid(props) {
             next={() => setActiveStep(2)}
           />
         </Grid>
+      </TabPanel>
+      <TabPanel value={activeStep} step={2}>
+        <Grid container direction="column">
+          <Box>Waiting for done.</Box>
+        </Grid>
+      </TabPanel>
     </Box>
   )
 }
