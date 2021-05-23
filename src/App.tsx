@@ -161,7 +161,7 @@ function App(props) {
             >
               <Switch>
                 <Route exact path="/">
-                  <MethodInfo Title="PeakSniffer" ImgPath={home.imgpath} MdPath={home.mdpath}/>
+                  <MethodInfo Title="" ImgPath={home.imgpath} MdPath={home.mdpath}/>
                 </Route>
                 <Route path="/predict">
                   <PredictGrid/>
@@ -170,7 +170,7 @@ function App(props) {
                   <QueryGrid/>
                 </Route>
                 <Route path="/info">
-                  <MethodInfo Title="PeakSniffer"/>
+                  <MethodInfo Title=""/>
                 </Route>
                 {helps.items.map(item =>
                   (
