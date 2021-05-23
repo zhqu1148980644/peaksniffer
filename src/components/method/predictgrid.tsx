@@ -33,6 +33,9 @@ const anchors_default_data = [
     GenomeRange: "chr1:91363-91505", id: "chr1:91363-91505"
   },
   {
+  GenomeRange: "chr1:783055-783158", id: "chr1:783055-783158"
+  },
+  {
    GenomeRange: "chr1:785655-785805", id: "chr1:785655-785805"
   }
 ]
