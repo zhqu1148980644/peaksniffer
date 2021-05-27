@@ -103,7 +103,7 @@ function QueryGrid(props) {
     // here must do deep copy
     const newModels = models.map(c => ({...c}))
     newModels.forEach(model => {
-      model.selected = !items.includes(model.model);
+      model.selected = items.includes(model.model);
     })
     setModels(newModels)
   }
