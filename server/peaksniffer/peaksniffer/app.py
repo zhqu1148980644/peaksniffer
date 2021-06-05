@@ -47,7 +47,7 @@ def get_test_samples(n=1000):
 
 pairs = []
 for model in ['GM12878', 'K562','Hela-S3']:
-    for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/cluster_test_dbscanss.bed"):
+    for line in open("/store/yshen/webserve/"+str(model)+"/cluster_test_dbscanss.bed"):
         lines = line.strip().split()
         pairs.append({'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6][:7])})      
 models = [
@@ -74,7 +74,7 @@ async def predict_anchors(bed: List[dict], selected_models: List[str]) -> List[d
     for row in bed:
         for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
          try:   
-            for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed"):
+            for line in open("/store/yshen/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed"):
                 lines = line.strip().split()
                 if row['GenomeRange'] == str(lines[0])+':'+str(lines[1])+'-'+str(lines[2]):
 #                    print(row['GenomeRange'], model)
@@ -83,10 +83,10 @@ async def predict_anchors(bed: List[dict], selected_models: List[str]) -> List[d
             row[model] = str(e)
     try:
         for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
-            os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed")
-        os.remove('query_bed'+str(os.getpid())+'.bed')
+            os.remove("/store/yshen/webserve/"+str(model)+"/step1_model"+str(os.getpid())+"_predict.bed")
+        os.remove('/store/yshen/webserve/peaksniffer_temp/query_bed'+str(os.getpid())+'.bed')
     except Exception as e:
-        os.remove('query_bed'+str(os.getpid())+'.bed')
+        os.remove('/store/yshen/webserve/peaksniffer_temp/query_bed'+str(os.getpid())+'.bed')
     #await asyncio.sleep(2)
     return bed
 
@@ -96,7 +96,7 @@ async def predict_anchor_pairs(bedpe: List[dict], selected_models: List[str]) ->
     for row in bedpe:
         for model in [m['model'] for m in models]:
          try:
-           for line in open("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed"):
+           for line in open("/store/yshen/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed"):
                 lines = line.strip().split()
                 if row['GenomeRange1'] == str(lines[0])+':'+str(lines[1])+'-'+str(lines[2]) and row['GenomeRange2'] == str(lines[3])+':'+str(lines[4])+'-'+str(lines[5]):
 #                    print(row['GenomeRange1'], model)
@@ -105,10 +105,10 @@ async def predict_anchor_pairs(bedpe: List[dict], selected_models: List[str]) ->
              row[model] = str(e)
     try:  
         for model in [m for m in selected_models if m in ['GM12878', 'K562','Hela-S3']]:
-            os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed")
-        os.remove('query_bedpe'+str(os.getpid())+'.bed')
+            os.remove("/store/yshen/webserve/"+str(model)+"/step2_predict_loop"+str(os.getpid())+".bed")
+        os.remove('/store/yshen/webserve/peaksniffer_temp/query_bedpe'+str(os.getpid())+'.bed')
     except Exception as e:
-        os.remove('query_bedpe'+str(os.getpid())+'.bed')
+        os.remove('/store/yshen/webserve/peaksniffer_temp/query_bedpe'+str(os.getpid())+'.bed')
 #           row[model] = np.random.random()
     #await asyncio.sleep(2)
     return bedpe
@@ -162,7 +162,8 @@ class PredictQuery(BaseModel):
 
 
 async def query_to_bed_file(bed):
-    o = open('query_bed'+str(os.getpid())+'.bed', 'w')
+    o = open('/store/yshen/webserve/peaksniffer_temp/query_bed'+str(os.getpid())+'.bed', 'w')
+    print(os.getpid())
     for row in bed:
         chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", row['GenomeRange'])[0]
 #        print(chr1, st1, ed1)
@@ -174,25 +175,32 @@ async def query_to_bed_file(bed):
 
 @app.post('/predict/anchors')
 async def predict_anchor(query: PredictQuery):
+#    print(111111111111111111111111111111111111111111)
     import os  
     f = await query_to_bed_file(query.data)
     ids = str(os.getpid())
 
     envs = dict(os.environ.items())
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/GM12878"
+    envs['PWD'] = "/store/yshen/webserve/GM12878"
     a = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step1.py -b {f} -id {ids}", env=envs, cwd=envs['PWD'])
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/K562"
+#    print(22222222222222222222222222222222222222)
+    envs['PWD'] = "/store/yshen/webserve/K562"
     b = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step1.py -b {f} -id {ids}", env=envs, cwd=envs['PWD'])
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/Hela-S3"
+#    print(33333333333333333333333333333333333333)
+    envs['PWD'] = "/store/yshen/webserve/Hela-S3"
     c  = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step1.py -b {f} -id {ids}", env=envs, cwd=envs['PWD'])
     await a.wait()
+#    print(444444444444444444444444444444444444444)
     await b.wait()
+#    print(5555555555555555555555555)
     await c.wait()
+#    print(66666666666666666666666666666666666666)
     bed = await predict_anchors(query.data, query.models)
+#    print(277777777777777777777777777777777777)
     return bed
 
 async def query_to_bedpe_file(bed):
-    o = open('query_bedpe'+str(os.getpid())+'.bed', 'w')
+    o = open('/store/yshen/webserve/peaksniffer_temp/query_bedpe'+str(os.getpid())+'.bed', 'w')
     for row in bed:
         chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", row['GenomeRange1'])[0]
 #        print(chr1, st1, ed1)
@@ -207,20 +215,27 @@ async def query_to_bedpe_file(bed):
 
 @app.post("/predict/anchor_pairs")
 async def predict_anchor_pair(query: PredictQuery):
+#    print(11111111111111111111111111111111)
     import os
     f = await query_to_bedpe_file(query.data)
 #    await f.wait()
     ids = str(os.getpid())
     envs = dict(os.environ.items())
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/GM12878"
-    a = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step2.py -id {ids}", env=envs, cwd=envs['PWD'])
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/K562"
-    b = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step2.py -id {ids}", env=envs, cwd=envs['PWD'])
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/Hela-S3"
-    c  = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step2.py -id {ids}", env=envs, cwd=envs['PWD'])
+    envs['PWD'] = "/store/yshen/webserve/GM12878"
+    a = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step2.py -id {ids}", cwd=envs['PWD'])
+#    print(222222222222222222222222222)
+    envs['PWD'] = "/store/yshen/webserve/K562"
+    b = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step2.py -id {ids}",  cwd=envs['PWD'])
+#    print(3333333333333333333333333333333333)
+    envs['PWD'] = "/store/yshen/webserve/Hela-S3"
+    c  = await asyncio.create_subprocess_shell(f"KERAS_BACKEND=tensorflow python charid_predict_step2.py -id {ids}",  cwd=envs['PWD'])
+#    print(444444444444444444444444444444444444)
     await a.wait()
+#    print(5555555555555555555555555555555555555)
     await b.wait()
+#    print(6666666666666666666666666666666666666)
     await c.wait()
+#    print(777777777777777777777777777777)
     bedpe = await predict_anchor_pairs(query.data, query.models)
     return bedpe
 
@@ -236,17 +251,17 @@ async def view_loop(row: dict):
 #    with open(Path(PATH, "test_loop.jpeg"), 'rb') as wf:
 #        img = wf.read()
     import os
-    import PyPDF2
+#    import PyPDF2
     chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", row['GenomeRange1'])[0]
     chr2, st2, ed2 = re.findall(r"(.*):(.*)-(.*)", row['GenomeRange2'])[0]
     model = row['Model']
     envs = dict(os.environ.items())
-    envs['PWD'] = "/public/home/yshen/deep_learning/webserve/"+str(model)
+    envs['PWD'] = "/store/yshen/webserve/"+str(model)
     a = await asyncio.create_subprocess_shell(f"python visualization.py -g {chr1}:{st1}-{ed2}", env=envs, cwd=envs['PWD'])
-#    python "/public/home/yshen/deep_learning/webserve/"+str(row['Model'])+"/visualization.py -g"+"\t"+str(chr1)+":"+str(st1)+"-"+str(ed2)
+#    python "/store/yshen/webserve/"+str(row['Model'])+"/visualization.py -g"+"\t"+str(chr1)+":"+str(st1)+"-"+str(ed2)
     await a.wait() 
     with open(Path(envs['PWD'], "example_"+str(chr1).strip()+":"+str(st1)+"-"+str(ed2)+".jpeg"), 'rb') as wf:
         img = wf.read()
-    os.remove("/public/home/yshen/deep_learning/webserve/"+str(model)+"/example_"+str(chr1).strip()+":"+str(st1)+"-"+str(ed2)+".jpeg")
+    os.remove("/store/yshen/webserve/"+str(model)+"/example_"+str(chr1).strip()+":"+str(st1)+"-"+str(ed2)+".jpeg")
     return Response(content=img, media_type="image/jpeg")
 #    os.remove("example_"+str(chr1)+":"+str(st1)+"-"+str(ed2)+".jpeg")
