@@ -8,11 +8,11 @@ const StyledFab = styled(Fab)`
   margin: 5px;
 `
 
-function ChromRangeInserter({submit}) {
+export function ChromRangeInserter({submit}) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [value, setValue] = useState("")
   return (
-    <FormControl fullWidth style={{flexDirection: "row", alignItems: "flex-end"}}>
+    <FormControl style={{flexDirection: "row", alignItems: "flex-end", width: "100%"}}>
       <StyledFab
         variant="extended"
         size="small"
