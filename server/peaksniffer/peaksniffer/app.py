@@ -113,14 +113,32 @@ class Query(BaseModel):
     offset: int = 0
     limit: int = 0
     chroms: List[str] = None
+    genomeRange: str = None
 
-
+#filtered_pairs = []
 @app.post('/query/predicted_pairs')
 async def query_pairs(query: Query):
     models = query.models or []
-
-    filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
-
+    gr = query.genomeRange
+    if len(gr) != 0:
+        chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", gr)[0]
+        if int(st1) >= int(ed1):
+            filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
+        else:
+            filtered_pairs = []
+            for model in models:
+                envs = dict(os.environ.items())
+                envs['PWD'] = "/store/yshen/webserve/"+str(model)
+                a = await asyncio.create_subprocess_shell(f"pairix cluster_test_dbscanss.bed.gz '{chr1}:{st1}-{ed1}|{chr1}:{st1}-{ed1}' >test{os.getpid()}.txt", env=envs, cwd=envs['PWD'])
+                await a.wait()
+                for line in open("/store/yshen/webserve/"+str(model)+"/test"+str(os.getpid())+".txt"):
+                    lines = line.strip().split()
+                    print(lines)
+                    filtered_pairs.append({'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6][:7])})
+                os.remove("/store/yshen/webserve/"+str(model)+"/test"+str(os.getpid())+".txt")
+#        filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
+    else:
+        filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
     res = filtered_pairs[query.offset: query.offset + query.limit]
     print("query", query)
     return res
@@ -130,11 +148,15 @@ async def query_pairs(query: Query):
 async def download_pairs(query: Query):
     models = query.models or []
     filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
-    res = filtered_pairs[query.offset: query.offset + query.limit]
+#    res = filtered_pairs[query.offset: query.offset + query.limit]
     print("download", query)
     import io
     stream = io.StringIO()
-    for pair in res:
+#    for model in models:
+#      for line in open("/store/yshen/webserve/"+str(model)+"/cluster_test_dbscanss.bed"):
+#        lines = line.strip().split()
+#        pair = {'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6][:7])}
+    for pair in filtered_pairs:  
         model = pair['Model']
         gr1 = pair['GenomeRange1']
         chr1, st1, ed1 = re.findall(r"(.*):(.*)-(.*)", gr1)[0]
