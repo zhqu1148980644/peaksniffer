@@ -8,7 +8,7 @@ import {useSnackbar, VariantType} from 'notistack';
 
 
 import {CellComponents} from "./grid/renders";
-import HeaderControl, {ChipSelectionControl} from "./grid/control";
+import {HeaderControl, ChipSelectionControl, SearchInput} from "./grid/control";
 import FooterControl from "./grid/footer";
 import SelectTable from "./grid/table";
 import {LinearIndeterminate} from "../shared/utils";
@@ -130,11 +130,11 @@ function Predictdatagrid(props) {
   )
   const {back, next} = props
   const rightButtonsControl = [
-    <Button color="secondary" variant="contained" size="large" onClick={predict}>
+    <Button key={"prevBtn"} color="secondary" variant="contained" size="large" onClick={predict}>
       PREDICT
     </Button>
     ,
-    <ButtonGroup>
+    <ButtonGroup key={"nextBtn"}>
       <Button disabled={back === undefined} color="primary" variant="contained" size="large" onClick={back}>
         BACK
       </Button>

@@ -5156,6 +5156,7 @@ button.dropdown-item.is-active {
     max-height: calc(100vh - 40px);
     overflow: hidden;
     -ms-overflow-y: visible;
+    overflow-y: visible;
 }
 
 .modal-card-head,

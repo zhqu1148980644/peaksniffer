@@ -79,16 +79,18 @@ function EditableRender(props) {
 }
 
 
-export function GenomeRangeRender(props) {
-  const validate = (gr) => {
-    try {
-      const [_, chrom, start, end] = gr.match("^(.*?):(\\d+)-(\\d+)$")
-      return true
-    } catch (error) {
-      return false
-    }
+export function validateGenomeRange(gr: string) {
+  try {
+    const [_, chrom, start, end] = gr.match("^(.*?):(\\d+)-(\\d+)$")
+    return true
+  } catch (error) {
+    return false
   }
-  return <EditableRender validate={validate} {...props}/>
+}
+
+
+export function GenomeRangeRender(props) {
+  return <EditableRender validate={validateGenomeRange} {...props}/>
 }
 
 

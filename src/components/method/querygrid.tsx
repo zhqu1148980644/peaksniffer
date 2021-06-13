@@ -3,13 +3,14 @@ import {Box, Button, ButtonGroup, Grid, Step, StepButton, Stepper, withStyles} f
 import axios from "axios";
 
 import {TabPanel} from "./utils";
-import HeaderControl, {ChipSelectionControl} from "./grid/control";
+import {HeaderControl, ChipSelectionControl, SearchInput} from "./grid/control";
 import Querydatagrid from "./querydatagrid";
 import Viewer from "./grid/viwer";
 import GetAppIcon from '@material-ui/icons/GetApp';
 
 import TablePagination from '@material-ui/core/TablePagination';
 import {API} from "../../index"
+import {validateGenomeRange} from "./grid/renders"
 
 
 const styles = theme => ({
@@ -25,24 +26,25 @@ const steps = {
 
 
 function QueryGrid(props) {
-  const {classes, theme} = props
+  const { classes, theme } = props
   
   const [activeStep, setActiveStep] = useState(0);
   const handleStep = (step: number) => () => {
     setActiveStep(step);
   };
   const [models, setModels] = useState([])
+  const [genomeRange, setGenomeRange] = useState("")
   const [rowsPerPage, setRowsPerPage] = useState(25)
   const [page, setPage] = useState(0)
   const [data, setData] = useState([])
   const [viewingData, setViewingData] = useState(null)
   
-  const allModels = models.map(({model}) => model)
-  const selectedModels = models.filter(({selected}) => selected).map(({model}) => model)
+  const allModels = models.map(({ model }) => model)
+  const selectedModels = models.filter(({ selected }) => selected).map(({ model }) => model)
   
   const getNumItems = () => {
     let num = 0;
-    models.forEach(({size, selected}) => {
+    models.forEach(({ size, selected }) => {
       num += selected && size;
     })
     return num
@@ -68,11 +70,14 @@ function QueryGrid(props) {
   }, [])
   
   useEffect(() => {
-    axios.post(`${API}/query/predicted_pairs`, {
+    const info = {
       models: selectedModels,
       offset: Math.max(page * rowsPerPage, 0),
-      limit: rowsPerPage
-    })
+      limit: rowsPerPage,
+      genomeRange: genomeRange
+    }
+    console.log(info)
+    axios.post(`${API}/query/predicted_pairs`, info)
       .then((rsp) => {
         console.log(rsp.data, page, rowsPerPage)
         setData(rsp.data)
@@ -83,7 +88,7 @@ function QueryGrid(props) {
       .then(() => {
       
       })
-  }, [models, page, rowsPerPage])
+  }, [models, page, rowsPerPage, genomeRange])
   
   
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -101,9 +106,9 @@ function QueryGrid(props) {
   
   const setSelectedModels = (items) => {
     // here must do deep copy
-    const newModels = models.map(c => ({...c}))
+    const newModels = models.map(c => ({ ...c }))
     newModels.forEach(model => {
-      model.selected = !items.includes(model.model);
+      model.selected = items.includes(model.model);
     })
     setModels(newModels)
   }
@@ -130,14 +135,28 @@ function QueryGrid(props) {
   }
   
   
-  const leftModelSelectorControl = (
+  const leftModelSelectorControl = [
+    // <div style={{width: "50%"}}>
     <ChipSelectionControl
+      key={"selectModelBtn"}
       label={"Models"}
       items={allModels}
       activatedItems={selectedModels}
       setActivatedItems={setSelectedModels}
+    />,
+    // </div>,
+    // <div style={{width: "50%"}}>
+    <SearchInput
+      key={"selectGenomeRangeBtn"}
+      label="ChromRange"
+      placeholder="chr1:1213214-124352354"
+      defaultValue={genomeRange}
+      validate={validateGenomeRange}
+      onClick={setGenomeRange}
+      children={undefined}
     />
-  )
+    // </div>
+  ]
   
   
   const rightDownLoadControl = (
