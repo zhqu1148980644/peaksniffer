@@ -111,7 +111,7 @@ function QueryGrid(props) {
         models: selectedModels,
         offset: Math.max(page * rowsPerPage, 0),
         limit: rowsPerPage,
-        GenomeRange: GenomeRange
+        GenomeRange: enomeRange
       },
       {
         responseType: "blob"
