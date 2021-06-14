@@ -6,6 +6,7 @@ import {LinearIndeterminate} from "../shared/utils";
 import SelectTable from "./grid/table";
 import {CellComponents} from "./grid/renders";
 import styled from "styled-components"
+import {splitGenomeRange, compareArrays} from "./utils"
 
 const _default_columns = [
   {...get_default_column("Model"), frozen: Column.FrozenDirection.LEFT},
@@ -53,8 +54,13 @@ export default function Querydatagrid(props) {
   const onColumnSort = ({key, order}) => {
     const sortedData = [...data]
     sortedData.sort((row1, row2) => {
-      const v1 = row1[key], v2 = row2[key]
-      return order === "asc" ? (v1 <= v2 ? -1 : 1) : (v2 <= v1 ? -1 : 1);
+      const v1 = splitGenomeRange(row1[key]), v2 = splitGenomeRange(row2[key])
+      if (Array.isArray(v1)) {
+        return order === 'asc' ? compareArrays(v1, v2) : compareArrays(v2, v1);
+      }
+      else {
+        return order === "asc" ? (v1 <= v2 ? -1 : 1) : (v2 <= v1 ? -1 : 1);
+      }
     })
     setSortState({
       ...sortedData, [key]: sortState[key] == "desc" ? null : order

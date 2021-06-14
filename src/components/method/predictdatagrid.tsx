@@ -12,6 +12,7 @@ import {HeaderControl, ChipSelectionControl, SearchInput} from "./grid/control";
 import FooterControl from "./grid/footer";
 import SelectTable from "./grid/table";
 import {LinearIndeterminate} from "../shared/utils";
+import { compareArrays, splitGenomeRange } from "./utils";
 
 
 const Container = styled.div`
@@ -68,8 +69,13 @@ function Predictdatagrid(props) {
   const onColumnSort = ({key, order}) => {
     const sortedData = [...data]
     sortedData.sort((row1, row2) => {
-      const v1 = row1[key], v2 = row2[key]
-      return order === "asc" ? (v1 <= v2 ? -1 : 1) : (v2 <= v1 ? -1 : 1);
+      const v1 = splitGenomeRange(row1[key]), v2 = splitGenomeRange(row2[key])
+      if (Array.isArray(v1)) {
+        return order === 'asc' ? compareArrays(v1, v2) : compareArrays(v2, v1);
+      }
+      else {
+    	  return order === "asc" ? (v1 <= v2 ? -1 : 1) : (v2 <= v1 ? -1 : 1);
+      }
     })
     setSortState({
       ...sortedData, [key]: sortState[key] == "desc" ? null : order

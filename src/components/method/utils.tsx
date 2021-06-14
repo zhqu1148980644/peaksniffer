@@ -48,3 +48,26 @@ export function genomeRangeColumn(column, editable = true) {
     editable: true
   }
 }
+
+
+export function splitGenomeRange(gr: string) {
+	try {
+    const [_, chrom, start, end] = gr.match("^(.*?):(\\d+)-(\\d+)$")
+		return [chrom, parseInt(start), parseInt(end)]
+	} catch (error) {
+		return gr
+	}
+}
+
+
+export function compareArrays(a, b) {
+  let elA, elB, i, len; 
+  for (i = 0, len = Math.min(a.length, b.length); i < len; i++) {               
+    elA = a[i]
+    elB = b[i];
+    if (elA > elB) return 1;
+    if (elA < elB) return -1;
+  }
+  return b.length - a.length;
+};
+
