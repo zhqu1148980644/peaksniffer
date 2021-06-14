@@ -22,7 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.lock
-*/__pycache__
+**/__pycache__
 */.idea
 .*lock
 
