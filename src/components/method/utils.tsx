@@ -48,3 +48,13 @@ export function genomeRangeColumn(column, editable = true) {
     editable: true
   }
 }
+
+
+export function splitGenomeRange(gr: string) {
+	try {
+    const [_, chrom, start, end] = gr.match("^(.*?):(\\d+)-(\\d+)$")
+		return [chrom, start, end]
+	} catch (error) {
+		return gr
+	}
+}
