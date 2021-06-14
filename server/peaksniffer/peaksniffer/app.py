@@ -52,15 +52,12 @@ for model in ['GM12878', 'K562','Hela-S3']:
 models = [
     {
         "model": "GM12878",
-        'size': len([pair for pair in pairs if pair['Model'] == "GM12878"]),
     },
     {
         "model": "K562",
-        'size': len([pair for pair in pairs if pair['Model'] == "K562"]),
     },
     {
         "model": "Hela-S3",
-        'size': len([pair for pair in pairs if pair['Model'] == "Hela-S3"]),
     },
 
 ]
@@ -133,7 +130,7 @@ async def query_pairs(query: Query):
                 await a.wait()
                 for line in open("/store/yshen/webserve/"+str(model)+"/test"+str(os.getpid())+".txt"):
                     lines = line.strip().split()
-                    print(lines)
+#                    print(lines)
                     filtered_pairs.append({'Model': str(model), 'GenomeRange1':str(lines[0])+":"+str(lines[1])+"-"+str(lines[2]), 'GenomeRange2':str(lines[3])+":"+str(lines[4])+"-"+str(lines[5]),'Prob':str(lines[6][:7])})
                 os.remove("/store/yshen/webserve/"+str(model)+"/test"+str(os.getpid())+".txt")
 #        filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
@@ -141,7 +138,7 @@ async def query_pairs(query: Query):
         filtered_pairs = [pair for pair in pairs if pair['Model'] in models]
     res = filtered_pairs[query.offset: query.offset + query.limit]
     print("query", query)
-    return res
+    return {'data': res, 'size': len(filtered_pairs)}
 
 
 @app.post("/download/predicted_pairs")
@@ -239,9 +236,12 @@ async def predict_anchor_pair(query: PredictQuery):
     return bedpe
 
 
+#class ModelQuery(BaseModel):
+#    GenomeRange: str = ""
+
 @app.get("/models")
 async def get_models():
-    return models
+    return models 
 
 
 @app.post("/view/loop")
