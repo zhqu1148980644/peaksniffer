@@ -38,24 +38,15 @@ function QueryGrid(props) {
   const [page, setPage] = useState(0)
   const [data, setData] = useState([])
   const [viewingData, setViewingData] = useState(null)
+  const [size, setSize] = useState(0)
   
   const allModels = models.map(({ model }) => model)
   const selectedModels = models.filter(({ selected }) => selected).map(({ model }) => model)
   
-  const getNumItems = () => {
-    let num = 0;
-    models.forEach(({ size, selected }) => {
-      num += selected && size;
-    })
-    return num
-  }
-  const numItems = getNumItems()
   console.log(models)
   
   useEffect(() => {
-    axios.post(`${API}/models`, {
-      GenomeRange: GenomeRange
-    })
+    axios.get(`${API}/models`)
       .then((rsp) => {
         // set models and numPage
         const newModels = rsp.data.map((model) => ({
@@ -78,11 +69,10 @@ function QueryGrid(props) {
       limit: rowsPerPage,
       genomeRange: genomeRange
     }
-    console.log(info)
     axios.post(`${API}/query/predicted_pairs`, info)
       .then((rsp) => {
-        console.log(rsp.data, page, rowsPerPage)
-        setData(rsp.data)
+        setData(rsp.data.data)
+        setSize(rsp.data.size)
       })
       .catch((error) => {
         console.log(error.toJSON())
@@ -120,7 +110,8 @@ function QueryGrid(props) {
       {
         models: selectedModels,
         offset: Math.max(page * rowsPerPage, 0),
-        limit: rowsPerPage
+        limit: rowsPerPage,
+        GenomeRange: GenomeRange
       },
       {
         responseType: "blob"
@@ -192,7 +183,7 @@ function QueryGrid(props) {
           <Querydatagrid default_data={data} handleOnView={handleOnView}/>
           <TablePagination
             component="div"
-            count={numItems}
+            count={size}
             page={page}
             onChangePage={handleChangePage}
             rowsPerPage={rowsPerPage}
