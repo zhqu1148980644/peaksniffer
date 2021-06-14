@@ -34,7 +34,7 @@ function QueryGrid(props) {
   };
   const [models, setModels] = useState([])
   const [genomeRange, setGenomeRange] = useState("")
-  const [rowsPerPage, setRowsPerPage] = useState(25)
+  const [rowsPerPage, setRowsPerPage] = useState(50)
   const [page, setPage] = useState(0)
   const [data, setData] = useState([])
   const [viewingData, setViewingData] = useState(null)
@@ -111,7 +111,7 @@ function QueryGrid(props) {
         models: selectedModels,
         offset: Math.max(page * rowsPerPage, 0),
         limit: rowsPerPage,
-        GenomeRange: enomeRange
+        GenomeRange: genomeRange
       },
       {
         responseType: "blob"
