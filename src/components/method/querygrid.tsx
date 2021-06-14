@@ -53,7 +53,9 @@ function QueryGrid(props) {
   console.log(models)
   
   useEffect(() => {
-    axios.get(`${API}/models`)
+    axios.post(`${API}/models`, {
+      GenomeRange: GenomeRange
+    })
       .then((rsp) => {
         // set models and numPage
         const newModels = rsp.data.map((model) => ({
