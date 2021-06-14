@@ -58,3 +58,16 @@ export function splitGenomeRange(gr: string) {
 		return gr
 	}
 }
+
+
+export function compareArrays(a, b) {
+  let elA, elB, i, len; 
+  for (i = 0, len = Math.min(a.length, b.length); i < len; i++) {               
+    elA = a[i]
+    elB = b[i];
+    if (elA > elB) return 1;
+    if (elA < elB) return -1;
+  }
+  return b.length - a.length;
+};
+
