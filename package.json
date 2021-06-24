@@ -18,7 +18,7 @@
     "axios": "^0.21.1",
     "bulma": "^0.9.1",
     "classnames": "^2.2.6",
-    "node-sass": "4.14.1",
+    "node-sass": "6.0.1",
     "notistack": "^1.0.7",
     "package.json": "^2.0.1",
     "react": "^17.0.1",
