@@ -19,7 +19,7 @@ chr1:91363-91505    chr1:785655-785805
 ## (1)Query
 - #### This page shows information on the loops predicted by the CharID model for the three cell lines, containing the location of each loop and the predicted probability value.
 - #### The user can filter and  searching these loops by entering the region of interest in the middle data box.
-- #### Users can click on the images on the **info** column and can visualize chromatain features around given chromosome region pairs.
+- #### Users can click on the images on the **info** column and can visualize chromatin features around given chromosome region pairs.
 ## (2)Visualize
 - #### On this page, the user can enter any region of interest for the three cell lines and view the CharID predicted loops for that region, the loops for the experiment, some modification signals, and Hi-C heatmap information.Example is shown below:
 ```
