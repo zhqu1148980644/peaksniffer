@@ -184,9 +184,9 @@ function QueryGrid(props) {
           <TablePagination
             count={size}
             page={page}
-            onChangePage={handleChangePage}
+            onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Grid>
       </TabPanel>
