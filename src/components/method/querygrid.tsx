@@ -182,7 +182,6 @@ function QueryGrid(props) {
           <HeaderControl left={leftModelSelectorControl} right={rightDownLoadControl}/>
           <Querydatagrid default_data={data} handleOnView={handleOnView}/>
           <TablePagination
-            component="div"
             count={size}
             page={page}
             onChangePage={handleChangePage}
