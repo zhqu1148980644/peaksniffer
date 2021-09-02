@@ -25,5 +25,6 @@ yarn-error.log*
 **/__pycache__
 */.idea
 .*lock
+.*log
 
 .eslintcache
